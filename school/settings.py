@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'faculty',   # Notre application ajoutée ici
-    'student' 
+    'student' ,
+    'home_auth',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+AUTH_USER_MODEL = 'home_auth.CustomUser'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+LOGIN_URL = '/authentication/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
