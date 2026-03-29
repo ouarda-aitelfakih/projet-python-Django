@@ -24,7 +24,11 @@
 <div class="about-info">
 <h4>About Me</h4>
 <div class="media mt-3">
-<img src="{{student.student_image ? student.student_image.url : ''}}" class="mr-3" alt="...">
+{% if student.student_image %}
+    <img src="{{ student.student_image.url }}" class="mr-3" alt="Photo">
+{% else %}
+    <img src="{% static 'assets/img/default.jpg' %}" class="mr-3" alt="Photo">
+{% endif %}
 <div class="media-body">
 <ul>
 <li>
@@ -82,13 +86,13 @@
 <div class="row mt-2">
 <div class="col-md-12">
 <h5>Permanent Address</h5>
-<p>480, Estern Avenue, Courtage area, New York</p>
+<p>{{ student.parent.permanent_address }}</p>
 </div>
 </div>
 <div class="row mt-2">
 <div class="col-md-12">
 <h5>Present Address</h5>
-<p>480, Estern Avenue, Courtage area, New York</p>
+<p>{{ student.parent.present_address }}</p>
 </div>
 </div>
 </div>
