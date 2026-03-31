@@ -1,11 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Student, Parent
 
-def student_list(request):
-    return render(request, 'students/students.html')
 
+#1. LISTE DES ÉTUDIANTS 
+def student_list(request):
+    # Récupérer TOUS les étudiants depuis la base de données
+    students = Student.objects.all()
+    # Les envoyer au template
+    return render(request, 'students/students.html',  {'student_list': students})
+
+#2. AJOUTER UN ÉTUDIANT
 def add_student(request):
     if request.method == 'POST':
         # Récupérer les données de l'étudiant
@@ -70,11 +76,74 @@ def add_student(request):
     else:
         return render(request, 'students/add-student.html')
 
+
+#3. MODIFIER UN ÉTUDIANT
 def edit_student(request, student_id):
-    return render(request, 'students/edit-student.html')
+    # Récupérer l'étudiant à modifier
+    student = get_object_or_404(Student, student_id=student_id)
+    parent  = student.parent  # Récupérer son parent lié
 
+    if request.method == 'POST':
+        # Mettre à jour les données de l'étudiant
+        student.first_name       = request.POST.get('first_name')
+        student.last_name        = request.POST.get('last_name')
+        student.gender           = request.POST.get('gender')
+        student.date_of_birth    = request.POST.get('date_of_birth')
+        student.student_class    = request.POST.get('student_class')
+        student.joining_date     = request.POST.get('joining_date')
+        student.mobile_number    = request.POST.get('mobile_number')
+        student.admission_number = request.POST.get('admission_number')
+        student.section          = request.POST.get('section')
+
+         # Si une nouvelle image est uploadée
+        if request.FILES.get('student_image'):
+            student.student_image = request.FILES.get('student_image')
+
+        student.save()  # Sauvegarder l'étudiant
+
+        # Mettre à jour les données du parent
+        parent.father_name       = request.POST.get('father_name')
+        parent.father_occupation = request.POST.get('father_occupation')
+        parent.father_mobile     = request.POST.get('father_mobile')
+        parent.father_email      = request.POST.get('father_email')
+        parent.mother_name       = request.POST.get('mother_name')
+        parent.mother_occupation = request.POST.get('mother_occupation')
+        parent.mother_mobile     = request.POST.get('mother_mobile')
+        parent.mother_email      = request.POST.get('mother_email')
+        parent.present_address   = request.POST.get('present_address')
+        parent.permanent_address = request.POST.get('permanent_address')
+
+        parent.save()  # Sauvegarder le parent
+
+        messages.success(request, 'Étudiant modifié avec succès !')
+        return redirect('student_list')
+    
+        # GET : afficher le formulaire pré-rempli
+    return render(request, 'students/edit-student.html', {
+        'student': student,
+        'parent': parent,
+    })
+
+    
+
+
+#4. DÉTAIL D'UN ÉTUDIANT 
 def view_student(request, student_id):
-    return render(request, 'students/student-details.html')
+    # Chercher l'étudiant avec cet ID, ou afficher erreur 404
+    student = get_object_or_404(Student, student_id=student_id)
+    
+    return render(request, 'students/student-details.html',{'student': student})
 
+#4. SUPPRIMER UN ÉTUDIANT 
 def delete_student(request, student_id):
+    student = get_object_or_404(Student, student_id=student_id)
+    
+    # Supprimer le parent aussi (CASCADE le fait automatiquement
+    # mais on supprime le parent pour être explicite)
+    parent = student.parent
+    student.delete()
+    parent.delete()
+
+    messages.success(request, 'Étudiant supprimé avec succès !')
     return redirect('student_list')
+    
