@@ -1,0 +1,67 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="page-wrapper">
+  <div class="content container-fluid">
+
+    <!-- En-tête -->
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">{{ title }}</h3>
+        </div>
+        <div class="col-auto">
+          <a href="{% url 'holiday_list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Retour
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              {{ form.errors }}
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label>Nom du jour férié</label>
+            {{ form.name }}
+          </div>
+
+          <div class="form-group">
+            <label>Date de début</label>
+            {{ form.start_date }}
+          </div>
+
+          <div class="form-group">
+            <label>Date de fin <small class="text-muted">(laisser vide si un seul jour)</small></label>
+            {{ form.end_date }}
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            {{ form.description }}
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Enregistrer
+          </button>
+          <a href="{% url 'holiday_list' %}" class="btn btn-secondary">
+            Annuler
+          </a>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

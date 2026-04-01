@@ -1,0 +1,20 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-header">
+  <h3 class="page-title">Supprimer un jour férié</h3>
+</div>
+
+<div class="card">
+  <div class="card-body text-center">
+    <h4>Voulez-vous vraiment supprimer <b>{{ holiday.name }}</b> ?</h4>
+    <p class="text-muted">Cette action est irréversible.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+      <a href="{% url 'holiday_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

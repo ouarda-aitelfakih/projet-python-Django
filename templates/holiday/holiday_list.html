@@ -1,0 +1,129 @@
+{% extends 'Home/base.html' %}
+{% load holiday_extras static %}
+{% block body %}
+
+<div class="page-wrapper">
+  <div class="content container-fluid">
+
+    <!-- En-tête -->
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Jours Fériés</h3>
+        </div>
+        <div class="col-auto">
+          <a href="{% url 'holiday_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendrier -->
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <a href="?month={{ prev_month }}&year={{ prev_year }}" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <h4 class="mb-0">{{ month_name }} {{ year }}</h4>
+        <a href="?month={{ next_month }}&year={{ next_year }}" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered text-center">
+          <thead class="thead-light">
+            <tr>
+              <th>Lun</th>
+              <th>Mar</th>
+              <th>Mer</th>
+              <th>Jeu</th>
+              <th>Ven</th>
+              <th class="text-danger">Sam</th>
+              <th class="text-danger">Dim</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for week in cal %}
+            <tr>
+              {% for day in week %}
+              <td style="height:60px; vertical-align:top; padding:4px;
+                {% if day != 0 and day in holiday_days %}background-color:#fff3cd;{% endif %}">
+                {% if day != 0 %}
+                  {% if day == today.day and month == today.month and year == today.year %}
+                    <span class="badge badge-primary">{{ day }}</span>
+                  {% else %}
+                    <span>{{ day }}</span>
+                  {% endif %}
+                  {% for k, v in holiday_days.items %}
+                    {% if k == day %}
+                      <br><small class="text-danger" style="font-size:10px;">🔴 {{ v.name }}</small>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="mt-2">
+          <span style="background:#fff3cd; padding:3px 10px; border-radius:5px; font-size:13px;">🔴 Jour férié</span>
+          <span class="ml-3 badge badge-primary" style="font-size:13px;">Aujourd'hui</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Liste complète des jours fériés</h4>
+        <a href="{% url 'holiday_create' %}" class="btn btn-primary btn-sm">
+          <i class="fas fa-plus"></i> Ajouter
+        </a>
+      </div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom</th>
+              <th>Date début</th>
+              <th>Date fin</th>
+              <th>Durée</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for holiday in holidays %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td><b>{{ holiday.name }}</b></td>
+              <td>{{ holiday.start_date|date:'d M Y' }}</td>
+              <td>{% if holiday.is_single_day %}—{% else %}{{ holiday.end_date|date:'d M Y' }}{% endif %}</td>
+              <td>{{ holiday.duration }} jour(s)</td>
+              <td>{{ holiday.description|default:'—' }}</td>
+              <td>
+                <a href="{% url 'holiday_update' holiday.pk %}" class="btn btn-sm btn-success">
+                  <i class="fas fa-pen"></i>
+                </a>
+                <a href="{% url 'holiday_delete' holiday.pk %}" class="btn btn-sm btn-danger">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="text-center">Aucun jour férié enregistré.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

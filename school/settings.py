@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'faculty',   # Notre application ajoutée ici
     'student' ,
     'home_auth',
+    'holiday',
 ]
 
 MIDDLEWARE = [
