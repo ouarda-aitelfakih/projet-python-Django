@@ -1,15 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from school.decorators import admin_required, teacher_required, student_required
 from .models import Exam, ExamResult
 from subjects.models import Subject
 from student.models import Student
 
 # Create your views here.
+
+@login_required
 def exam_list(request):
     exams = Exam.objects.all()
     return render(request, 'exams/exams.html', {'exams': exams})
 
+@admin_required
 def add_exam(request):
     subjects = Subject.objects.all()
     if request.method == 'POST':
@@ -24,6 +28,9 @@ def add_exam(request):
         messages.success(request, 'Exam added!')
         return redirect('exam_list')
     return render(request, 'exams/add-exam.html', {'subjects': subjects})
+
+
+@admin_required
 
 def edit_exam(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
@@ -41,12 +48,17 @@ def edit_exam(request, pk):
         return redirect('exam_list')
     return render(request, 'exams/edit-exam.html',{'exam': exam, 'subjects': subjects})
 
+
+@admin_required
+
 def delete_exam(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     exam.delete()
     messages.success(request, 'Exam deleted!')
     return redirect('exam_list')
 
+
+@teacher_required
 def exam_results(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     students = Student.objects.all()
@@ -68,6 +80,7 @@ def exam_results(request, pk):
         'students': students,
         'existing': existing
     })
+
 
 @login_required
 def my_results(request):

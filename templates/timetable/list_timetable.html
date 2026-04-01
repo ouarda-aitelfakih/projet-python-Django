@@ -12,9 +12,11 @@
           <h3 class="page-title">Emploi du Temps</h3>
         </div>
         <div class="col-auto">
-          <a href="{% url 'timetable_create' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Ajouter un créneau
-          </a>
+          {% if user.is_admin or user.is_teacher %}
+            <a href="{% url 'timetable_create' %}" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Ajouter un créneau
+            </a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -55,14 +57,18 @@
               </td>
               <td>{{ entry.room|default:'—' }}</td>
               <td>
-                <a href="{% url 'timetable_update' entry.pk %}" 
-                   class="btn btn-sm btn-success">
-                  <i class="fas fa-pen"></i>
-                </a>
-                <a href="{% url 'timetable_delete' entry.pk %}" 
-                   class="btn btn-sm btn-danger">
-                  <i class="fas fa-trash"></i>
-                </a>
+                {% if user.is_admin or user.is_teacher %}
+                  <a href="{% url 'timetable_update' entry.pk %}" 
+                     class="btn btn-sm btn-success">
+                    <i class="fas fa-pen"></i>
+                  </a>
+                {% endif %}
+                {% if user.is_admin %}
+                  <a href="{% url 'timetable_delete' entry.pk %}" 
+                     class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}

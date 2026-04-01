@@ -98,10 +98,21 @@
                      <li class="submenu">
                         <a href="#"><i class="fas fa-user-graduate"></i> <span> Students</span> <span class="menu-arrow"></span></a>
                         <ul>
+                        {% if user.is_admin or user.is_teacher %}
                            <li><a href="{% url 'student_list' %}">Student List</a></li>
-                           <li><a href="{% url 'student_list' %}">Student View</a></li>
+                        {% endif %}
+                        {% if user.is_student %}
+                           {% with student_id=request.user.student.student_id %}
+                              {% if student_id %}
+                           <li><a href="{% url 'view_student' student_id %}">Student View</a></li>
+                           <li><a href="{% url 'edit_student' student_id %}">Student Edit</a></li>
+                              {% endif %}
+                           {% endwith %}
+                        {% endif %}   
+                        {% if user.is_admin %}
                            <li><a href="{% url 'add_student' %}">Student Add</a></li>
-                           <li><a href="{% url 'student_list' %}">Student Edit</a></li>
+                        {% endif %}
+                        
                         </ul>
                      </li>
                      <li class="submenu">
