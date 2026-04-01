@@ -10,23 +10,30 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('subjects', '0001_initial'),
-        ('teacher', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TimeTable',
+            name='Exam',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('day', models.CharField(choices=[('Lundi', 'Lundi'), ('Mardi', 'Mardi'), ('Mercredi', 'Mercredi'), ('Jeudi', 'Jeudi'), ('Vendredi', 'Vendredi'), ('Samedi', 'Samedi')], max_length=20)),
+                ('name', models.CharField(max_length=100)),
+                ('date', models.DateField()),
                 ('start_time', models.TimeField()),
                 ('end_time', models.TimeField()),
                 ('room', models.CharField(blank=True, max_length=50)),
+                ('total_marks', models.IntegerField(default=100)),
                 ('subject', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='subjects.subject')),
-                ('teacher', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='teacher.teacher')),
             ],
-            options={
-                'ordering': ['day', 'start_time'],
-            },
+        ),
+        migrations.CreateModel(
+            name='ExamResult',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('marks_obtained', models.FloatField(default=0)),
+                ('grade', models.CharField(blank=True, max_length=5)),
+                ('remarks', models.TextField(blank=True)),
+                ('exam', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='exam.exam')),
+            ],
         ),
     ]

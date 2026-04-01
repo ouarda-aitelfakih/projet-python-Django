@@ -2,6 +2,7 @@ import calendar
 from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from school.decorators import admin_required
 from .models import Holiday
 from .forms import HolidayForm
 
@@ -64,7 +65,7 @@ def holiday_list(request):
     }
     return render(request, 'holiday/holiday_list.html', context)
 
-@login_required
+@admin_required
 def holiday_create(request):
     form = HolidayForm(request.POST or None)
     if form.is_valid():
@@ -75,7 +76,7 @@ def holiday_create(request):
         'title': 'Ajouter un jour férié'
     })
 
-@login_required
+@admin_required
 def holiday_update(request, pk):
     holiday = get_object_or_404(Holiday, pk=pk)
     form = HolidayForm(request.POST or None, instance=holiday)
@@ -87,7 +88,7 @@ def holiday_update(request, pk):
         'title': 'Modifier un jour férié'
     })
 
-@login_required
+@admin_required
 def holiday_delete(request, pk):
     holiday = get_object_or_404(Holiday, pk=pk)
     if request.method == 'POST':

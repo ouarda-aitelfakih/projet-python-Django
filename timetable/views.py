@@ -1,10 +1,9 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.contrib import messages
 from .models import TimeTable
+from school.decorators import admin_required, teacher_required
 from subjects.models import Subject
 from teacher.models import Teacher
 
@@ -55,7 +54,7 @@ def timetable_list(request):
         'timetable_json': json.dumps(data, ensure_ascii=False, indent=2),
     })
 
-@login_required
+@teacher_required
 def timetable_create(request):
     subjects = Subject.objects.all()
     teachers = Teacher.objects.all()
@@ -89,7 +88,7 @@ def timetable_create(request):
         'days': ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     })
 
-@login_required
+@teacher_required
 def timetable_update(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
     subjects = Subject.objects.all()
@@ -124,7 +123,7 @@ def timetable_update(request, pk):
         'days': ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     })
 
-@login_required
+@admin_required
 def timetable_delete(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
     if request.method == 'POST':

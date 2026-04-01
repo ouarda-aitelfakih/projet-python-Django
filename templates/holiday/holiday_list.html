@@ -12,9 +12,11 @@
           <h3 class="page-title">Jours Fériés</h3>
         </div>
         <div class="col-auto">
-          <a href="{% url 'holiday_create' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Ajouter
-          </a>
+          {% if user.is_admin %}
+            <a href="{% url 'holiday_create' %}" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Ajouter
+            </a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -78,9 +80,11 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Liste complète des jours fériés</h4>
-        <a href="{% url 'holiday_create' %}" class="btn btn-primary btn-sm">
-          <i class="fas fa-plus"></i> Ajouter
-        </a>
+        {% if user.is_admin %}
+          <a href="{% url 'holiday_create' %}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Ajouter
+          </a>
+        {% endif %}
       </div>
       <div class="card-body">
         <table class="table table-hover">
@@ -105,12 +109,16 @@
               <td>{{ holiday.duration }} jour(s)</td>
               <td>{{ holiday.description|default:'—' }}</td>
               <td>
-                <a href="{% url 'holiday_update' holiday.pk %}" class="btn btn-sm btn-success">
-                  <i class="fas fa-pen"></i>
-                </a>
-                <a href="{% url 'holiday_delete' holiday.pk %}" class="btn btn-sm btn-danger">
-                  <i class="fas fa-trash"></i>
-                </a>
+                {% if user.is_admin %}
+                  <a href="{% url 'holiday_update' holiday.pk %}" class="btn btn-sm btn-success">
+                    <i class="fas fa-pen"></i>
+                  </a>
+                  <a href="{% url 'holiday_delete' holiday.pk %}" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                {% else %}
+                  <span class="text-muted">-</span>
+                {% endif %}
               </td>
             </tr>
             {% empty %}

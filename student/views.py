@@ -1,17 +1,27 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from school.decorators import admin_required, teacher_required, student_required
 from .models import Student, Parent
 
 
 #1. LISTE DES ÉTUDIANTS 
+@login_required
 def student_list(request):
-    # Récupérer TOUS les étudiants depuis la base de données
-    students = Student.objects.all()
-    # Les envoyer au template
+    # Admin et enseignants peuvent voir tous les étudiants
+    if request.user.is_admin or request.user.is_teacher:
+        students = Student.objects.all()
+    else:
+        # Étudiant ne voit que son propre profil
+        try:
+            students = Student.objects.filter(user=request.user)
+        except:
+            students = Student.objects.none()
+    
     return render(request, 'students/students.html',  {'student_list': students})
 
-#2. AJOUTER UN ÉTUDIANT
+@admin_required
 def add_student(request):
     if request.method == 'POST':
         # Récupérer les données de l'étudiant
@@ -77,11 +87,13 @@ def add_student(request):
         return render(request, 'students/add-student.html')
 
 
-#3. MODIFIER UN ÉTUDIANT
+@student_required
 def edit_student(request, student_id):
     # Récupérer l'étudiant à modifier
     student = get_object_or_404(Student, student_id=student_id)
     parent  = student.parent  # Récupérer son parent lié
+
+    
 
     if request.method == 'POST':
         # Mettre à jour les données de l'étudiant
@@ -124,17 +136,24 @@ def edit_student(request, student_id):
         'parent': parent,
     })
 
-    
 
 
-#4. DÉTAIL D'UN ÉTUDIANT 
+@login_required
 def view_student(request, student_id):
-    # Chercher l'étudiant avec cet ID, ou afficher erreur 404
-    student = get_object_or_404(Student, student_id=student_id)
+    # Admin et enseignants peuvent voir tous les étudiants
+    if request.user.is_admin or request.user.is_teacher:
+        student = get_object_or_404(Student, student_id=student_id)
+    else:
+        # Étudiant ne voit que son propre profil
+        try:
+            student = get_object_or_404(Student, student_id=student_id, user=request.user)
+        except:
+            messages.error(request, 'Accès non autorisé.')
+            return redirect('student_list')
     
     return render(request, 'students/student-details.html',{'student': student})
 
-#4. SUPPRIMER UN ÉTUDIANT 
+@admin_required
 def delete_student(request, student_id):
     student = get_object_or_404(Student, student_id=student_id)
     
@@ -146,4 +165,3 @@ def delete_student(request, student_id):
 
     messages.success(request, 'Étudiant supprimé avec succès !')
     return redirect('student_list')
-    
