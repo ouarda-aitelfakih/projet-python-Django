@@ -1,0 +1,33 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="page-wrapper">
+  <div class="content container-fluid">
+
+    <div class="page-header">
+      <h3 class="page-title">Supprimer un créneau</h3>
+    </div>
+
+    <div class="card">
+      <div class="card-body text-center">
+        <h4>Voulez-vous vraiment supprimer ce créneau ?</h4>
+        <p class="text-muted">
+          <b>{{ timetable.day }}</b> — 
+          {{ timetable.subject.name }} — 
+          {{ timetable.start_time|time:'H:i' }} à {{ timetable.end_time|time:'H:i' }}
+        </p>
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Confirmer
+          </button>
+          <a href="{% url 'timetable_list' %}" class="btn btn-secondary">Annuler</a>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
