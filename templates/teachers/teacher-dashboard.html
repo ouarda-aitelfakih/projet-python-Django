@@ -1,0 +1,150 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+
+<div class="page-header">
+<div class="row">
+<div class="col-sm-12">
+<h3 class="page-title">Welcome Teacher!</h3>
+<ul class="breadcrumb">
+<li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+<li class="breadcrumb-item active">Teacher Dashboard</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card">
+<div class="card-body">
+<div class="dash-widget-header">
+<span class="dash-widget-icon bg-primary">
+<i class="fas fa-users"></i>
+</span>
+<div class="dash-count">
+<h3>0</h3>
+<p>Total Students</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card">
+<div class="card-body">
+<div class="dash-widget-header">
+<span class="dash-widget-icon bg-success">
+<i class="fas fa-book"></i>
+</span>
+<div class="dash-count">
+<h3>0</h3>
+<p>Total Subjects</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card">
+<div class="card-body">
+<div class="dash-widget-header">
+<span class="dash-widget-icon bg-warning">
+<i class="fas fa-calendar-check"></i>
+</span>
+<div class="dash-count">
+<h3>0</h3>
+<p>Total Exams</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card">
+<div class="card-body">
+<div class="dash-widget-header">
+<span class="dash-widget-icon bg-danger">
+<i class="fas fa-clock"></i>
+</span>
+<div class="dash-count">
+<h3>0</h3>
+<p>Pending Tasks</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-6 col-sm-12">
+<div class="card">
+<div class="card-header">
+<h5 class="card-title">Recent Activities</h5>
+</div>
+<div class="card-body">
+<ul class="activity-feed">
+<li>
+<div class="activity-content">
+<div class="timeline-content">
+<span class="activity-time">Today at 9:30 AM</span>
+<p class="activity-text">Logged in to the system</p>
+</div>
+</div>
+</li>
+<li>
+<div class="activity-content">
+<div class="timeline-content">
+<span class="activity-time">Yesterday at 2:15 PM</span>
+<p class="activity-text">Updated student records</p>
+</div>
+</div>
+</li>
+<li>
+<div class="activity-content">
+<div class="timeline-content">
+<span class="activity-time">2 days ago</span>
+<p class="activity-text">Added new exam schedule</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="col-md-6 col-sm-12">
+<div class="card">
+<div class="card-header">
+<h5 class="card-title">Quick Actions</h5>
+</div>
+<div class="card-body">
+<div class="quick-links">
+<a href="{% url 'student_list' %}" class="btn btn-primary btn-block mb-2">
+<i class="fas fa-users"></i> Manage Students
+</a>
+<a href="{% url 'subject_list' %}" class="btn btn-success btn-block mb-2">
+<i class="fas fa-book"></i> Manage Subjects
+</a>
+<a href="{% url 'exam_list' %}" class="btn btn-warning btn-block mb-2">
+<i class="fas fa-clipboard-list"></i> Manage Exams
+</a>
+<a href="{% url 'my_results' %}" class="btn btn-info btn-block">
+<i class="fas fa-chart-line"></i> View Results
+</a>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+{% endblock %}

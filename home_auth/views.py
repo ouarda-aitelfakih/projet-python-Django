@@ -43,15 +43,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful!')
-            if user.is_admin:
-                return redirect('dashboard')
-            elif user.is_teacher:
-                return redirect('dashboard')
-            elif user.is_student:
-                return redirect('dashboard')
-            else:
-                messages.error(request, 'Invalid user role')
-                return redirect('index')
+            return redirect('dashboard')
         else:
             messages.error(request, 'Invalid credentials')
 
