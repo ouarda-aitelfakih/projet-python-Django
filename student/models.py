@@ -1,4 +1,5 @@
 from django.db import models
+from home_auth.models import CustomUser
 
 # Create your models here.
 class Parent(models.Model): 
@@ -33,6 +34,8 @@ class Student(models.Model):
         upload_to='students/', blank=True) 
     parent = models.OneToOneField( 
         Parent, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self): 
-     return f"{self.first_name} {self.last_name} ({self.student_id})" 
+     return f"{self.first_name} {self.last_name} ({self.student_id})"

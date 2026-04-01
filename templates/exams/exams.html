@@ -1,0 +1,51 @@
+{% extends 'Home/base.html' %}{% load static %}{% block body %}
+<div class='page-wrapper'><div class='content container-fluid'>
+    <div class='page-header'>
+        <div class='row align-items-center'>
+            <div class='col'><h3 class='page-title'>Exam List</h3></div>
+                <div class='col-auto'>
+                    <a href="{% url 'add_exam' %}" class='btn btn-primary'>
+                    <i class='fas fa-plus'></i></a>
+                </div>
+            </div>
+        </div>
+        <div class='row'><div class='col-sm-12'><div class='card card-table'>
+            <div class='card-body'><table class='table table-hover datatable'>
+                <thead><tr>
+                    <th>#</th><th>Exam Name</th><th>Subject</th><th>Date</th>
+                    <th>Time</th><th>Room</th><th>Total Marks</th>
+                    <th class='text-right'>Action</th>
+                </tr></thead>
+                <tbody>
+                {% for exam in exams %}
+                    <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><b>{{ exam.name }}</b></td>
+                    <td>{{ exam.subject.name }}</td>
+                    <td>{{ exam.date|date:'d M Y' }}</td>
+                    <td>{{ exam.start_time }} — {{ exam.end_time }}</td>
+                    <td>{{ exam.room|default:'—' }}</td>
+                    <td>{{ exam.total_marks }}</td>
+                    <td class='text-right'>
+                        <a href="{% url 'exam_results' exam.pk %}"
+                        class='btn btn-sm btn-info mr-1'>
+                        <i class='fas fa-list'></i> Results</a>
+                        <a href="{% url 'edit_exam' exam.pk %}"
+                        class='btn btn-sm bg-success-light mr-1'>
+                        <i class='fas fa-pen'></i></a>
+                        <form action="{% url 'delete_exam' exam.pk %}"
+                        method='POST' style='display:inline;'>
+                            {% csrf_token %}
+                            <button type='submit' class='btn btn-sm bg-danger-light'
+                            onclick="return confirm('Delete?')">
+                            <i class='fas fa-trash'></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan='8' class='text-center'>No exams found.</td></tr>
+                {% endfor %}
+                </tbody>
+                </table></div>
+</div></div></div>
+</div></div>{% endblock %}

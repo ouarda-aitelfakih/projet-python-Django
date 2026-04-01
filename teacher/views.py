@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Teacher
 from department.models import Department
+from subjects.models import Subject
 
 # Create your views here.
 #  1. LISTE 
