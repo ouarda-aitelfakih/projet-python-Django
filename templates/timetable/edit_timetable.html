@@ -1,0 +1,111 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="page-wrapper">
+  <div class="content container-fluid">
+
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Modifier un créneau</h3>
+        </div>
+        <div class="col-auto">
+          <a href="{% url 'timetable_list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Retour
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+
+        {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Jour <span class="text-danger">*</span></label>
+                <select name="day" class="form-control" required>
+                  {% for day in days %}
+                    <option value="{{ day }}"
+                      {% if day == timetable.day %}selected{% endif %}>
+                      {{ day }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Salle</label>
+                <input type="text" name="room" class="form-control"
+                       value="{{ timetable.room }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Heure début <span class="text-danger">*</span></label>
+                <input type="time" name="start_time" class="form-control"
+                       value="{{ timetable.start_time|time:'H:i' }}" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Heure fin <span class="text-danger">*</span></label>
+                <input type="time" name="end_time" class="form-control"
+                       value="{{ timetable.end_time|time:'H:i' }}" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Matière <span class="text-danger">*</span></label>
+                <select name="subject" class="form-control" required>
+                  {% for subject in subjects %}
+                    <option value="{{ subject.pk }}"
+                      {% if subject.pk == timetable.subject_id %}selected{% endif %}>
+                      {{ subject.name }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Enseignant <span class="text-danger">*</span></label>
+                <select name="teacher" class="form-control" required>
+                  {% for t in teachers %}
+                    <option value="{{ t.pk }}"
+                      {% if t.pk == timetable.teacher_id %}selected{% endif %}>
+                      {{ t.first_name }} {{ t.last_name }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Enregistrer
+          </button>
+          <a href="{% url 'timetable_list' %}" class="btn btn-secondary">Annuler</a>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

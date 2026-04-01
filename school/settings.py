@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'faculty',   # Notre application ajoutée ici
+    'faculty',   
     'student' ,
     'home_auth',
     'holiday',
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'teacher',
     'subjects',
     'exam',
+    'timetable',
 ]
 
 MIDDLEWARE = [

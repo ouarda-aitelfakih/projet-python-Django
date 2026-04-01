@@ -1,0 +1,186 @@
+{% extends 'Home/base.html' %}
+{% load static timetable_extras %}
+{% block body %}
+
+<div class="page-wrapper">
+  <div class="content container-fluid">
+
+    <!-- En-tête -->
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Emploi du Temps</h3>
+        </div>
+        <div class="col-auto">
+          <a href="{% url 'timetable_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter un créneau
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau liste par jour -->
+    {% for day, entries in timetable_by_day.items %}
+    {% if entries %}
+    <div class="card mb-3">
+      <div class="card-header" style="background-color:#f8f9fa;">
+        <h5 class="mb-0">
+          <i class="fas fa-calendar-day"></i> {{ day }}
+        </h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Heure début</th>
+              <th>Heure fin</th>
+              <th>Matière</th>
+              <th>Enseignant</th>
+              <th>Salle</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+            <tr>
+              <td>{{ entry.start_time|time:'H:i' }}</td>
+              <td>{{ entry.end_time|time:'H:i' }}</td>
+              <td>
+                <span class="badge badge-info">
+                  {{ entry.subject.name }}
+                </span>
+              </td>
+              <td>
+                {{ entry.teacher.first_name }} {{ entry.teacher.last_name }}
+              </td>
+              <td>{{ entry.room|default:'—' }}</td>
+              <td>
+                <a href="{% url 'timetable_update' entry.pk %}" 
+                   class="btn btn-sm btn-success">
+                  <i class="fas fa-pen"></i>
+                </a>
+                <a href="{% url 'timetable_delete' entry.pk %}" 
+                   class="btn btn-sm btn-danger">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <!-- Vue Grille Visuelle -->
+    <div class="card mt-4" id="print-grid">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">📅 Vue Grille — Emploi du Temps</h5>
+        <div>
+          <button onclick="printGrid()" class="btn btn-sm btn-success mr-2">
+            <i class="fas fa-print"></i> Imprimer
+          </button>
+          <a href="{% url 'timetable_json' %}" 
+           class="btn btn-sm btn-outline-info" target="_blank">
+            <i class="fas fa-download"></i> Export JSON
+          </a>
+        </div> 
+      </div>
+      <div class="card-body" style="overflow-x:auto;">
+        <table class="table table-bordered text-center" style="min-width:800px;">
+          <thead class="thead-dark">
+            <tr>
+              <th style="width:80px;">Heure</th>
+              {% for day in days %}
+                <th>{{ day }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for hour in hours %}
+            <tr>
+              <td class="text-muted font-weight-bold"
+                  style="font-size:12px; vertical-align:middle;">
+                {{ hour }}
+              </td>
+              {% for day in days %}
+              <td style="padding:4px; vertical-align:middle; height:60px;">
+                {% with entry=grid|get_day:day|get_hour:hour %}
+                  {% if entry %}
+                    <div style="background:#4e73df; color:white;
+                                border-radius:8px; padding:6px;
+                                font-size:11px;">
+                      <b>{{ entry.subject.name }}</b><br>
+                      <small>
+                        <i class="fas fa-user"></i>
+                        {{ entry.teacher.first_name }} {{ entry.teacher.last_name }}
+                      </small><br>
+                      <small>
+                        <i class="fas fa-clock"></i>
+                        {{ entry.start_time|time:'H:i' }}-{{ entry.end_time|time:'H:i' }}
+                      </small>
+                      {% if entry.room %}
+                      <br><small>
+                        <i class="fas fa-door-open"></i> {{ entry.room }}
+                      </small>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Export JSON Visual Timetabling -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">
+          🎁 Export JSON — Compatible Visual Timetabling
+        </h5>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">
+          Les données de l'emploi du temps sont exportées au format JSON 
+          compatible avec Visual Timetabling.
+        </p>
+        <pre style="background:#f8f9fa; padding:15px; border-radius:8px;
+                    font-size:12px; max-height:200px; overflow-y:auto;">{{ timetable_json }}</pre>
+        <div class="mt-3">
+          <a href="{% url 'timetable_json' %}" 
+             class="btn btn-info" target="_blank">
+            <i class="fas fa-download"></i> Télécharger JSON
+          </a>
+          <a href="https://www.visual-timetabling.be/" 
+             class="btn btn-outline-secondary ml-2" target="_blank">
+            <i class="fas fa-external-link-alt"></i> Visual Timetabling
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<style>
+  @media print {
+    /* Cacher tout sauf la grille */
+    body * { visibility: hidden; }
+    #print-grid, #print-grid * { visibility: visible; }
+    #print-grid { position: absolute; left: 0; top: 0; width: 100%; }
+  }
+</style>
+
+<script>
+  function printGrid() {
+    window.print();
+  }
+</script>
+
+{% endblock %}
