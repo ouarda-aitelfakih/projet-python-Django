@@ -22,7 +22,7 @@ Version      : 1.0
 	function init() {
 		var $this = Sidemenu;
 		$('#sidebar-menu a').on('click', function(e) {
-			if($(this).parent().hasClass('submenu')) {
+			if($(this).parent().hasClass('submenu') && $(this).next('ul').length > 0) {
 				e.preventDefault();
 			}
 			if(!$(this).hasClass('subdrop')) {
