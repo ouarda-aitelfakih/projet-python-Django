@@ -15,15 +15,15 @@
             <tbody>
             {% for result in results %}
                 <tr>
-                <td>{{ forloop.counter }}</td>
-                <td><b>{{ result.exam.name }}</b></td>
-                <td>{{ result.exam.subject.name }}</td>
-                <td>{{ result.exam.date|date:'d M Y' }}</td>
-                <td>{{ result.marks_obtained }}</td>
-                <td>{{ result.exam.total_marks }}</td>
-                <td><span class='badge badge-info'>{{ result.grade|default:'—' }}</span></td>
-                <td>{{ result.remarks|default:'—' }}</td>
-            </tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><b>{{ result.exam.name }}</b></td>
+                    <td>{{ result.exam.subject.name }}</td>
+                    <td>{{ result.exam.date|date:'d M Y' }}</td>
+                    <td>{{ result.marks_obtained }}</td>
+                    <td>{{ result.exam.total_marks }}</td>
+                    <td><span class='badge badge-info'>{{ result.grade|default:'—' }}</span></td>
+                    <td>{{ result.remarks|default:'—' }}</td>
+                </tr>
             {% empty %}
             <tr><td colspan='8' class='text-center'>No exam results found.</td></tr>
             {% endfor %}

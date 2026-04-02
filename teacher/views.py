@@ -61,9 +61,10 @@ def edit_teacher(request, teacher_id):
 
         if request.FILES.get('teacher_image'):
             teacher.teacher_image = request.FILES.get('teacher_image')
-            teacher.save()
-            messages.success(request, 'Teacher updated successfully!')
-            return redirect('teacher_list')
+        
+        teacher.save()
+        messages.success(request, 'Teacher updated successfully!')
+        return redirect('teacher_list')
     return render(request, 'teachers/edit-teacher.html',{'teacher': teacher, 'departments': departments})
 
 # 5. SUPPRIMER 

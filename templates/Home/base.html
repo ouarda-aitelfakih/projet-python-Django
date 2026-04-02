@@ -75,7 +75,7 @@
                      </div>
                      <a class="dropdown-item" href="profile.html">My Profile</a>
                      <a class="dropdown-item" href="inbox.html">Inbox</a>
-                     <a class="dropdown-item" href="">Logout</a>
+                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                   </div>
                </li>
             </ul>
@@ -124,20 +124,25 @@
                            <li><a href="{% url 'teacher_list' %}">Teacher Edit</a></li>
                         </ul>
                      </li>
+                     
                      <li class="submenu">
                         <a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'department_list'%}">Department List</a></li>
+                           {% if user.is_authenticated and user.is_admin %}
                            <li><a href="{% url 'add_department'%}">Department Add</a></li>
                            <li><a href="{% url 'department_list' %}">Department Edit</a></li>
+                           {% endif %}
                         </ul>
                      </li>
                      <li class="submenu">
                         <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'subject_list'%}">Subject List</a></li>
+                           {% if user.is_authenticated and user.is_admin %}
                            <li><a href="{% url 'subject_create'%}">Subject Add</a></li>
                            <li><a href="{% url 'subject_list' %}">Subject Edit</a></li>
+                           {% endif %}
                         </ul>
                      </li>
                      <li class="menu-title">
