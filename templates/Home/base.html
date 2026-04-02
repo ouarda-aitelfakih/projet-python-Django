@@ -122,11 +122,13 @@
                            <li><a href="{% url 'teacher_list' %}">Teacher List</a></li>
                         
                         {% if user.is_teacher %}
-                           
-                           <li><a href="{% url 'view_teacher' user.id  %}">Teacher View</a></li>
-                           <li><a href="{% url 'edit_teacher' user.id %}"> Teacher Edit</a></li>
-                           
-                        {% endif %}
+                              {% with teacher_id=request.user.teacher.teacher_id %}
+                                 {% if teacher_id %}
+                           <li><a href="{% url 'view_teacher' teacher_id  %}">Teacher View</a></li>
+                           <li><a href="{% url 'edit_teacher' teacher_id %}"> Teacher Edit</a></li>
+                                 {% endif %}
+                              {% endwith %}
+                         {% endif %}
                            
                         {% if user.is_admin %}
                            <li><a href="{% url 'add_teacher' %}">Teacher Add</a></li>

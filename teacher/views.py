@@ -17,8 +17,8 @@ def teacher_list(request):
 #  2. VOIR DÉTAIL 
 @login_required
 def view_teacher(request, teacher_id):
-    # Chercher par user_id (numérique) au lieu de teacher_id (chaîne)
-    teacher = get_object_or_404(Teacher, user_id=teacher_id)
+    # Chercher par  teacher_id (chaîne)
+    teacher = get_object_or_404(Teacher, teacher_id=teacher_id)
     return render(request, 'teachers/teacher-details.html', {'teacher': teacher})
 
 # 3. AJOUTER 
@@ -53,7 +53,7 @@ def add_teacher(request):
 @teacher_required
 def edit_teacher(request, teacher_id):
     # Chercher par user_id (numérique) au lieu de teacher_id (chaîne)
-    teacher = get_object_or_404(Teacher, user_id=teacher_id)
+    teacher = get_object_or_404(Teacher, teacher_id=teacher_id)
     departments = Department.objects.all()
     if request.method == 'POST':
         teacher.first_name = request.POST.get('first_name')
@@ -79,7 +79,7 @@ def edit_teacher(request, teacher_id):
 @admin_required
 def delete_teacher(request, teacher_id):
     # Chercher par user_id (numérique) au lieu de teacher_id (chaîne)
-    teacher = get_object_or_404(Teacher, user_id=teacher_id)
+    teacher = get_object_or_404(Teacher, teacher_id=teacher_id)
     teacher.delete()
     messages.success(request, 'Teacher deleted successfully!')
     return redirect('teacher_list')

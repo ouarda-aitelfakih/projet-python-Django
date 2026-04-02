@@ -45,11 +45,14 @@
                                 <td>{{ teacher.teacher_id }}</td>
                                 <td>
                                 <h2 class='table-avatar'>
+                            
                                 {% if teacher.teacher_image %}
+                                    
                                 <a href="{% url 'view_teacher' teacher.teacher_id %}"
                                     class='avatar avatar-sm mr-2'>
                                 <img class='avatar-img rounded-circle'src='{{ teacher.teacher_image.url }}'alt='Teacher'>
                                 </a>
+                                    
                                 {% endif %}
                             <a href="{% url 'view_teacher' teacher.teacher_id %}">{{ teacher.first_name }} {{ teacher.last_name }}
                             </a>
