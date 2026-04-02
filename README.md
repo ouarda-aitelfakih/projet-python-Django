@@ -96,4 +96,4 @@ python manage.py runserver
 admin / admin123
 
 ## Lien vidéo
-(lien ici)
+https://drive.google.com/file/d/1vQdj6whU8KFAntl61NofL1uXaMlIXo41/view?usp=drive_link
