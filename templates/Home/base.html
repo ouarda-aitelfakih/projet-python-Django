@@ -118,10 +118,20 @@
                      <li class="submenu">
                         <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Teachers</span> <span class="menu-arrow"></span></a>
                         <ul>
+                        
                            <li><a href="{% url 'teacher_list' %}">Teacher List</a></li>
-                           <li><a href="{% url 'teacher_list' %}">Teacher View</a></li>
+                        
+                        {% if user.is_teacher %}
+                           
+                           <li><a href="{% url 'view_teacher' user.id  %}">Teacher View</a></li>
+                           <li><a href="{% url 'edit_teacher' user.id %}"> Teacher Edit</a></li>
+                           
+                        {% endif %}
+                           
+                        {% if user.is_admin %}
                            <li><a href="{% url 'add_teacher' %}">Teacher Add</a></li>
-                           <li><a href="{% url 'teacher_list' %}">Teacher Edit</a></li>
+                        {% endif %}
+
                         </ul>
                      </li>
                      <li class="submenu">
