@@ -34,12 +34,20 @@
         <table class="table table-hover">
           <thead>
             <tr>
+            {% if user.is_admin or user.is_teacher %}
               <th>Heure début</th>
               <th>Heure fin</th>
               <th>Matière</th>
               <th>Enseignant</th>
               <th>Salle</th>
               <th>Actions</th>
+              {% else %}
+              <th>Heure début</th>
+              <th>Heure fin</th>
+              <th>Matière</th>
+              <th>Enseignant</th>
+              <th>Salle</th>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
