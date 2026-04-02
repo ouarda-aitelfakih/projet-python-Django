@@ -34,6 +34,7 @@
                   <p class="account-subtitle">Access to our dashboard</p>
                   
                   <!-- Error and success messages -->
+                  {% comment %}
                   {% if messages %}
                   <div class="alert alert-info">
                      {% for message in messages %}
@@ -41,6 +42,7 @@
                      {% endfor %}
                   </div>
                   {% endif %}
+                  {% endcomment %}
                   
                   <!-- Login Form -->
                   <form method="POST" action="{% url 'login' %}">

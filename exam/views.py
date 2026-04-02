@@ -90,4 +90,4 @@ def my_results(request):
         return render(request, 'exams/my-results.html', {'results': results})
     except Student.DoesNotExist:
         messages.error(request, 'No student profile found for your account.')
-        return redirect('index')
+        return redirect('dashboard')
