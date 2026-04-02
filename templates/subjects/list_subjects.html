@@ -25,6 +25,7 @@
         <table class="table table-hover">
           <thead>
             <tr>
+            {% if user.is_authenticated and user.is_admin %}
               <th>#</th>
               <th>Nom</th>
               <th>Code</th>
@@ -32,11 +33,21 @@
               <th>Enseignant</th>
               <th>Description</th>
               <th>Actions</th>
+              {% else %}
+              <th>#</th>
+              <th>Nom</th>
+              <th>Code</th>
+              <th>Département</th>
+              <th>Enseignant</th>
+              <th>Description</th>
+              
+              {% endif %}
             </tr>
           </thead>
           <tbody>
             {% for subject in subjects %}
             <tr>
+              
               <td>{{ forloop.counter }}</td>
               <td><b>{{ subject.name }}</b></td>
               <td><span class="badge badge-info">{{ subject.code }}</span></td>

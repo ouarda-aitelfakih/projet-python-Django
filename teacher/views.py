@@ -15,7 +15,7 @@ def teacher_list(request):
     return render(request, 'teachers/teachers.html', {'teachers': teachers})
 
 #  2. VOIR DÉTAIL 
-@login_required
+@teacher_required
 def view_teacher(request, teacher_id):
     # Chercher par  teacher_id (chaîne)
     teacher = get_object_or_404(Teacher, teacher_id=teacher_id)

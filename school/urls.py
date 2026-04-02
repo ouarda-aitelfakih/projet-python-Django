@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from faculty import views as faculty_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('faculty.urls')),
+    path('', faculty_views.index, name='index'),
+    path('dashboard/', faculty_views.dashboard, name='dashboard'),
     path('student/', include('student.urls')),  
     path('authentication/', include('home_auth.urls')),
     path('holiday/', include('holiday.urls')),
@@ -30,6 +32,5 @@ urlpatterns = [
     path('subjects/', include('subjects.urls')),
     path('exam/', include('exam.urls')),
     path('timetable/', include('timetable.urls')),
-
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

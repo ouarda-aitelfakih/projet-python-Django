@@ -2,6 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import CustomUser
+from django.contrib.auth.decorators import login_required
+from school.decorators import admin_required, teacher_required, student_required
+
+
+
+
 
 def signup_view(request):
     if request.method == 'POST':
@@ -49,7 +55,7 @@ def login_view(request):
 
     return render(request, 'authentication/login.html')
 
-
+@login_required
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out.')

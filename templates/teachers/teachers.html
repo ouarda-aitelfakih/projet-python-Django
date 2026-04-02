@@ -34,36 +34,46 @@
                             <table class='table table-hover datatable'>
                             <thead>
                             <tr>
-                                <th>ID</th><th>Name</th><th>Department</th>
-                                <th>Email</th><th>Phone</th><th>Joining Date</th>
+                                 {% if user.is_admin  %}<th>ID</th><th>Name</th><th>Department</th>
+                                <th>Email</th> <th>Phone</th> <th>Joining Date</th>
                                 <th class='text-right'>Action</th>
+                                {% else %}
+                                <th>Name</th><th>Department</th>
+                                <th>Email</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody>
                             {% for teacher in teachers %}
                             <tr>
+                                {% if user.is_admin  %}
                                 <td>{{ teacher.teacher_id }}</td>
                                 <td>
                                 <h2 class='table-avatar'>
-                            
-                                {% if teacher.teacher_image %}
-                                    
-                                <a href="{% url 'view_teacher' teacher.teacher_id %}"
-                                    class='avatar avatar-sm mr-2'>
-                                <img class='avatar-img rounded-circle'src='{{ teacher.teacher_image.url }}'alt='Teacher'>
-                                </a>
-                                    
-                                {% endif %}
+                                    {% if teacher.teacher_image %}
+                                        <a href="{% url 'view_teacher' teacher.teacher_id %}" 
+                                        class='avatar avatar-sm mr-2'>
+                                        <img class='avatar-img rounded-circle'src='{{ teacher.teacher_image.url }}'alt='Teacher'>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'view_teacher' teacher.teacher_id %}" 
+                                         class='avatar avatar-sm mr-2'>
+                                        
+                                        <img class="avatar-img rounded-circle"  src="{% static 'assets/img/user.jpg' %}" alt="User Image">
+                                        </a>     
+                                    {% endif %}
+
                             <a href="{% url 'view_teacher' teacher.teacher_id %}">{{ teacher.first_name }} {{ teacher.last_name }}
                             </a>
+                            
                             </h2>
                             </td>
                             <td>{{ teacher.department.name|default:'—' }}</td>
                             <td>{{ teacher.email }}</td>
                             <td>{{ teacher.phone }}</td>
                             <td>{{ teacher.joining_date|date:'d M Y' }}</td>
+
                             <td class='text-right'>
-                            {% if user.is_admin or user.is_teacher %}
                              <a href="{% url 'edit_teacher' teacher.teacher_id %}"class='btn btn-sm bg-success-light mr-2'>
                                 <i class='fas fa-pen'></i>
                              </a>
@@ -73,8 +83,31 @@
                                 <i class='fas fa-trash'></i>
                                 </button>
                             </form>
-                            {% endif %}
+                            {% else %}
+                            
+                                <td>
+                                <h2 class='table-avatar'>
+                                {% if teacher.teacher_image %}
+                                <a href="" 
+                                   class='avatar avatar-sm mr-2'>
+                                <img class='avatar-img rounded-circle'src='{{ teacher.teacher_image.url }}'alt='Teacher'>
+                                </a>
+                                {% else %}
+                                <a href="" 
+                                   class='avatar avatar-sm mr-2'>
+                                <img class="avatar-img rounded-circle"  src="{% static 'assets/img/user.jpg' %}" alt="User Image">
+                                </a>             
+                                {% endif %}
+
+                            <a href="">{{ teacher.first_name }} {{ teacher.last_name }}
+                            </a>
+                            
+                            </h2>
                             </td>
+                            <td>{{ teacher.department.name|default:'—' }}</td>
+                            <td>{{ teacher.email }}</td>
+                            {% endif %}
+                            
                         </tr>
                         {% empty %}
                         <tr><td colspan='7' class='text-center'>No teachers found.</td></tr>

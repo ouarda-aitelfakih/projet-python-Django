@@ -138,7 +138,7 @@ def edit_student(request, student_id):
 
 
 
-@login_required
+@student_required
 def view_student(request, student_id):
     # Admin et enseignants peuvent voir tous les étudiants
     if request.user.is_admin or request.user.is_teacher:
